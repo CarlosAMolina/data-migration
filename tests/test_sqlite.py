@@ -13,3 +13,12 @@ class TestFunctions(unittest.TestCase):
         result = sqlite._get_table_names(con)
         expected_result = ["lang", "lang_2"]
         self.assertEqual(expected_result, result)
+
+    def test_get_table_data(self):
+        con = sqlite3.connect(":memory:")
+        con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
+        with con:
+            con.execute("INSERT INTO lang(name) VALUES(?)", ("Python",))
+        result = sqlite._get_table_data(con, "lang")
+        expected_result = [(1, "Python")]
+        self.assertEqual(expected_result, result)
