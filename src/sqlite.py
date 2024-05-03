@@ -8,6 +8,8 @@ import typing as tp
 
 def main(db_file_path_name: str):
     print("Init export database:", db_file_path_name)
+    if not Path(db_file_path_name).exists():
+        raise FileExistsError(db_file_path_name)
     directory_export_path_name = _DirectoryNameGenerator().get_directory_path_name(db_file_path_name)
     print("Init create directory:", directory_export_path_name)
     Path(directory_export_path_name).mkdir()
