@@ -8,16 +8,17 @@ import typing as tp
 def main():
     db_file_path_name = "/tmp/contacts.test.sqlite3"
     directory_export_path_name = _DirectoryNameGenerator().get_directory_path_name(db_file_path_name)
-    directory_export_path = Path(directory_export_path_name)
     print("Init create directory:", directory_export_path_name)
-    directory_export_path.mkdir()
-    # db = _SQLiteDatabase(db_file_path_name=db_file_path_name)
-    # table_names = db.get_table_names()
-    # for index, table_name in enumerate(table_names, 1):
-    #    print(f"Init table {index}/{len(table_names)}", table_name)
-    #    rows = db.get_table_data(table_name)
-    #    colum_names = db.get_table_column_names(table_name)
-    #    _export_rows_to_csv(colum_names, rows, table_name)
+    Path(directory_export_path_name).mkdir()
+    db = _SQLiteDatabase(db_file_path_name=db_file_path_name)
+    table_names = db.get_table_names()
+    for index, table_name in enumerate(table_names, 1):
+        print(f"Init table {index}/{len(table_names)}", table_name)
+        rows = db.get_table_data(table_name)
+        colum_names = db.get_table_column_names(table_name)
+        csv_file_path_name = "{}/{}.csv".format(directory_export_path_name, table_name)
+        print("Export table to", csv_file_path_name)
+        _export_rows_to_csv(colum_names, rows, csv_file_path_name)
 
 
 _Rows = tp.List[tuple]
@@ -65,10 +66,9 @@ class _SQLiteDatabase:
         return result
 
 
-def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, table_name: str):
+def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, csv_file_path_name: str):
     "https://docs.python.org/3/library/csv.html"
-    file_path_name = f"/tmp/{table_name}.csv"
-    with open(file_path_name, "w", newline="") as csvfile:
+    with open(csv_file_path_name, "w", newline="") as csvfile:
         spamwriter = csv.writer(
             csvfile,
             delimiter=",",
