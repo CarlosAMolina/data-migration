@@ -5,8 +5,8 @@ import sqlite3
 import typing as tp
 
 
-def main():
-    db_file_path_name = "/tmp/contacts.test.sqlite3"
+def main(db_file_path_name: str):
+    print("Init export database:", db_file_path_name)
     directory_export_path_name = _DirectoryNameGenerator().get_directory_path_name(db_file_path_name)
     print("Init create directory:", directory_export_path_name)
     Path(directory_export_path_name).mkdir()
@@ -81,4 +81,5 @@ def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, csv_file_path_name: 
 
 
 if __name__ == "__main__":
-    main()
+    db_file_path_name = "/tmp/contacts.test.sqlite3"
+    main(db_file_path_name)
