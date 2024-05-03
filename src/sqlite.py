@@ -5,11 +5,10 @@ import typing as tp
 def main():
     db_file = "/tmp/contacts.test.sqlite3"
     connection = sqlite3.connect(db_file)
-    cursor = connection.cursor()
     table_names = _get_table_names(connection)
     for index, table_name in enumerate(table_names, 1):
         print(f"{index}/{len(table_names)}", table_name)
-        rows = _get_table_data(cursor, table_name)
+        rows = _get_table_data(connection, table_name)
         print(rows)
 
 
@@ -23,8 +22,8 @@ def _get_table_names(connection: sqlite3.Connection) -> tp.List[str]:
     return result
 
 
-def _get_table_data(cursor: sqlite3.Cursor, table_name: str) -> tp.List[tuple]:
-    response = cursor.execute(f"SELECT * FROM {table_name}")
+def _get_table_data(connection: sqlite3.Connection, table_name: str) -> tp.List[tuple]:
+    response = connection.execute(f"SELECT * FROM {table_name}")
     rows = response.fetchall()
     return rows
 
