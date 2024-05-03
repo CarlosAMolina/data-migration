@@ -2,6 +2,7 @@ from pathlib import Path
 import csv
 import datetime
 import sqlite3
+import sys
 import typing as tp
 
 
@@ -81,5 +82,7 @@ def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, csv_file_path_name: 
 
 
 if __name__ == "__main__":
-    db_file_path_name = "/tmp/contacts.test.sqlite3"
+    if len(sys.argv) < 2:
+        raise ValueError("No db file path name provided")
+    db_file_path_name = sys.argv[1]
     main(db_file_path_name)
