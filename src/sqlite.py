@@ -35,6 +35,12 @@ class _SQLiteDatabase:
         rows = response.fetchall()
         return rows
 
+    def get_table_column_names(self, table_name: str) -> tp.List[str]:
+        response = self._connection.execute(f"PRAGMA table_info({table_name})")
+        response = response.fetchall()
+        result = [row[1] for row in response]
+        return result
+
 
 class _CsvExport:
     def export_rows_to_csv(self, rows: _Rows, table_name: str):

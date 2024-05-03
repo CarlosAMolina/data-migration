@@ -24,3 +24,11 @@ class TestSQLiteDatabase(unittest.TestCase):
         result = db.get_table_data("lang")
         expected_result = [(1, "Python")]
         self.assertEqual(expected_result, result)
+
+    def test_get_table_colum_namesdata(self):
+        con = sqlite3.connect(":memory:")
+        con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
+        db = sqlite._SQLiteDatabase(connection=con)
+        result = db.get_table_column_names("lang")
+        expected_result = ["id", "name"]
+        self.assertEqual(expected_result, result)
