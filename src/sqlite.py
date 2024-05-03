@@ -1,3 +1,4 @@
+import csv
 import sqlite3
 import typing as tp
 
@@ -7,9 +8,10 @@ def main():
     db = _SQLiteDatabase(db_file=db_file)
     table_names = db.get_table_names()
     for index, table_name in enumerate(table_names, 1):
-        print(f"{index}/{len(table_names)}", table_name)
+        print(f"Init table {index}/{len(table_names)}", table_name)
         rows = db.get_table_data(table_name)
-        print(rows)
+        colum_names = db.get_table_column_names(table_name)
+        _export_rows_to_csv(colum_names, rows, table_name)
 
 
 _Rows = tp.List[tuple]
@@ -42,9 +44,19 @@ class _SQLiteDatabase:
         return result
 
 
-class _CsvExport:
-    def export_rows_to_csv(self, rows: _Rows, table_name: str):
-        raise NotImplementedError
+def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, table_name: str):
+    "https://docs.python.org/3/library/csv.html"
+    file_path_name = f"/tmp/{table_name}.csv"
+    with open(file_path_name, "w", newline="") as csvfile:
+        spamwriter = csv.writer(
+            csvfile,
+            delimiter=",",
+            quotechar='"',
+            quoting=csv.QUOTE_MINIMAL,
+        )
+        spamwriter.writerow(headers)
+        for row in rows:
+            spamwriter.writerow(row)
 
 
 if __name__ == "__main__":
