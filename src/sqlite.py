@@ -7,6 +7,10 @@ import typing as tp
 
 
 def main(db_file_path_name: str):
+    _export(db_file_path_name)
+
+
+def _export(db_file_path_name: str):
     print("Init export database:", db_file_path_name)
     if not Path(db_file_path_name).exists():
         raise FileExistsError(db_file_path_name)
