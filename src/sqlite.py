@@ -12,11 +12,14 @@ def main():
         print(rows)
 
 
+_Rows = tp.List[tuple]
+
+
 class _SQLiteDatabase:
     def __init__(self, connection: tp.Optional[sqlite3.Connection] = None, db_file: tp.Optional[str] = None):
         if all(arg is None for arg in [connection, db_file]):
             raise ValueError
-        self._connection = connection if db_file is None else sqlite3.connect(db_file)
+        self._connection: sqlite3.Connection = connection if db_file is None else sqlite3.connect(db_file)
 
     def get_table_names(self) -> tp.List[str]:
         response = self._connection.execute("SELECT * FROM sqlite_master where type='table'")
@@ -27,10 +30,15 @@ class _SQLiteDatabase:
             result.append(table_name)
         return result
 
-    def get_table_data(self, table_name: str) -> tp.List[tuple]:
+    def get_table_data(self, table_name: str) -> _Rows:
         response = self._connection.execute(f"SELECT * FROM {table_name}")
         rows = response.fetchall()
         return rows
+
+
+class _CsvExport:
+    def export_rows_to_csv(self, rows: _Rows, table_name: str):
+        raise NotImplementedError
 
 
 if __name__ == "__main__":
