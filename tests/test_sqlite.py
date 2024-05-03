@@ -20,6 +20,7 @@ class TestSQLiteDatabase(unittest.TestCase):
         con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
         with con:
             con.execute("INSERT INTO lang(name) VALUES(?)", ("Python",))
-        result = sqlite._get_table_data(con, "lang")
+        db = sqlite._SQLiteDatabase(connection=con)
+        result = db.get_table_data("lang")
         expected_result = [(1, "Python")]
         self.assertEqual(expected_result, result)

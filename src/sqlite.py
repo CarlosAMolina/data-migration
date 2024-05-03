@@ -8,12 +8,12 @@ def main():
     table_names = db.get_table_names()
     for index, table_name in enumerate(table_names, 1):
         print(f"{index}/{len(table_names)}", table_name)
-        rows = _get_table_data(db._connection, table_name)
+        rows = db.get_table_data(table_name)
         print(rows)
 
 
 class _SQLiteDatabase:
-    def __init__(self, connection: sqlite3.Connection = None, db_file: str = None):
+    def __init__(self, connection: tp.Optional[sqlite3.Connection] = None, db_file: tp.Optional[str] = None):
         if all(arg is None for arg in [connection, db_file]):
             raise ValueError
         self._connection = connection if db_file is None else sqlite3.connect(db_file)
@@ -27,11 +27,10 @@ class _SQLiteDatabase:
             result.append(table_name)
         return result
 
-
-def _get_table_data(connection: sqlite3.Connection, table_name: str) -> tp.List[tuple]:
-    response = connection.execute(f"SELECT * FROM {table_name}")
-    rows = response.fetchall()
-    return rows
+    def get_table_data(self, table_name: str) -> tp.List[tuple]:
+        response = self._connection.execute(f"SELECT * FROM {table_name}")
+        rows = response.fetchall()
+        return rows
 
 
 if __name__ == "__main__":
