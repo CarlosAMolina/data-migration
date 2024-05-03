@@ -1,27 +1,48 @@
+from pathlib import Path
 import csv
+import datetime
 import sqlite3
 import typing as tp
 
 
 def main():
-    db_file = "/tmp/contacts.test.sqlite3"
-    db = _SQLiteDatabase(db_file=db_file)
-    table_names = db.get_table_names()
-    for index, table_name in enumerate(table_names, 1):
-        print(f"Init table {index}/{len(table_names)}", table_name)
-        rows = db.get_table_data(table_name)
-        colum_names = db.get_table_column_names(table_name)
-        _export_rows_to_csv(colum_names, rows, table_name)
+    db_file_path_name = "/tmp/contacts.test.sqlite3"
+    directory_export_path_name = _DirectoryNameGenerator().get_directory_path_name(db_file_path_name)
+    directory_export_path = Path(directory_export_path_name)
+    print("Init create directory:", directory_export_path_name)
+    directory_export_path.mkdir()
+    # db = _SQLiteDatabase(db_file_path_name=db_file_path_name)
+    # table_names = db.get_table_names()
+    # for index, table_name in enumerate(table_names, 1):
+    #    print(f"Init table {index}/{len(table_names)}", table_name)
+    #    rows = db.get_table_data(table_name)
+    #    colum_names = db.get_table_column_names(table_name)
+    #    _export_rows_to_csv(colum_names, rows, table_name)
 
 
 _Rows = tp.List[tuple]
 
 
+class _DirectoryNameGenerator:
+    def get_directory_path_name(self, db_file_path_name: str) -> str:
+        db_file_name = self._get_db_file_name_from_path_name(db_file_path_name)
+        return "/tmp/{}-{}".format(db_file_name, self._str_date_time_for_name)
+
+    def _get_db_file_name_from_path_name(self, db_file_path_name: str) -> str:
+        return Path(db_file_path_name).name
+
+    @property
+    def _str_date_time_for_name(self) -> str:
+        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+
 class _SQLiteDatabase:
-    def __init__(self, connection: tp.Optional[sqlite3.Connection] = None, db_file: tp.Optional[str] = None):
-        if all(arg is None for arg in [connection, db_file]):
+    def __init__(self, connection: tp.Optional[sqlite3.Connection] = None, db_file_path_name: tp.Optional[str] = None):
+        if all(arg is None for arg in [connection, db_file_path_name]):
             raise ValueError
-        self._connection: sqlite3.Connection = connection if db_file is None else sqlite3.connect(db_file)
+        self._connection: sqlite3.Connection = (
+            connection if db_file_path_name is None else sqlite3.connect(db_file_path_name)
+        )
 
     def get_table_names(self) -> tp.List[str]:
         response = self._connection.execute("SELECT * FROM sqlite_master where type='table'")
