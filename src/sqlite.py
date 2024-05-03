@@ -4,12 +4,17 @@ import typing as tp
 
 def main():
     db_file = "/tmp/contacts.test.sqlite3"
-    connection = sqlite3.connect(db_file)
-    table_names = _get_table_names(connection)
+    db = _SQLiteDatabase(db_file)
+    table_names = _get_table_names(db._connection)
     for index, table_name in enumerate(table_names, 1):
         print(f"{index}/{len(table_names)}", table_name)
-        rows = _get_table_data(connection, table_name)
+        rows = _get_table_data(db._connection, table_name)
         print(rows)
+
+
+class _SQLiteDatabase:
+    def __init__(self, db_file: str):
+        self._connection = sqlite3.connect(db_file)
 
 
 def _get_table_names(connection: sqlite3.Connection) -> tp.List[str]:
