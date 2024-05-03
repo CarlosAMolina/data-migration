@@ -4,8 +4,8 @@ import typing as tp
 
 def main():
     db_file = "/tmp/contacts.test.sqlite3"
-    db = _SQLiteDatabase(db_file)
-    table_names = _get_table_names(db._connection)
+    db = _SQLiteDatabase(db_file=db_file)
+    table_names = db.get_table_names()
     for index, table_name in enumerate(table_names, 1):
         print(f"{index}/{len(table_names)}", table_name)
         rows = _get_table_data(db._connection, table_name)
@@ -13,18 +13,19 @@ def main():
 
 
 class _SQLiteDatabase:
-    def __init__(self, db_file: str):
-        self._connection = sqlite3.connect(db_file)
+    def __init__(self, connection: sqlite3.Connection = None, db_file: str = None):
+        if all(arg is None for arg in [connection, db_file]):
+            raise ValueError
+        self._connection = connection if db_file is None else sqlite3.connect(db_file)
 
-
-def _get_table_names(connection: sqlite3.Connection) -> tp.List[str]:
-    response = connection.execute("SELECT * FROM sqlite_master where type='table'")
-    rows = response.fetchall()
-    result = []
-    for row in rows:
-        table_name = row[1]
-        result.append(table_name)
-    return result
+    def get_table_names(self) -> tp.List[str]:
+        response = self._connection.execute("SELECT * FROM sqlite_master where type='table'")
+        rows = response.fetchall()
+        result = []
+        for row in rows:
+            table_name = row[1]
+            result.append(table_name)
+        return result
 
 
 def _get_table_data(connection: sqlite3.Connection, table_name: str) -> tp.List[tuple]:

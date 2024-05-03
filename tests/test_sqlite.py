@@ -5,12 +5,13 @@ import sqlite3
 from src import sqlite
 
 
-class TestFunctions(unittest.TestCase):
+class TestSQLiteDatabase(unittest.TestCase):
     def test_get_table_names(self):
         con = sqlite3.connect(":memory:")
         con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
         con.execute("CREATE TABLE lang_2(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
-        result = sqlite._get_table_names(con)
+        db = sqlite._SQLiteDatabase(connection=con)
+        result = db.get_table_names()
         expected_result = ["lang", "lang_2"]
         self.assertEqual(expected_result, result)
 
