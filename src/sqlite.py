@@ -5,11 +5,11 @@ def main():
     db_file = "/tmp/contacts.test.sqlite3"
     connection = sqlite3.connect(db_file)
     cursor = connection.cursor()
-    table_names = get_tables(cursor)
+    table_names = _get_tables(cursor)
     for index, table_name in enumerate(table_names, 1):
         print(f"{index}/{len(table_names)}", table_name)
 
-def get_tables(cursor: sqlite3.Cursor) -> tp.List[str]:
+def _get_tables(cursor: sqlite3.Cursor) -> tp.List[str]:
     response = cursor.execute("SELECT * FROM sqlite_master where type='table'")
     rows = response.fetchall()
     result = []
