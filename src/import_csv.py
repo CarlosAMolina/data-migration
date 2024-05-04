@@ -15,8 +15,9 @@ def import_csv_directory(csv_directory_path_name: str, db_file_path_name: str):
         print("Deleting db table data:", table_name)
         db.truncate_table(table_name)
         print("Importing", csv_file_path_name)
-        data = _get_csv_rows(csv_file_path_name)
-        print(data)  # TODO rm
+        column_names = db.get_table_column_names(table_name)
+        rows = _get_csv_rows(csv_file_path_name)
+        db.insert_rows(column_names, rows, table_name)
 
 
 def _get_csv_file_path_names_in_directory(directory_path_name: str) -> tp.List[str]:
