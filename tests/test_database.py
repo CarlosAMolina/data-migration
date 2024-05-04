@@ -32,3 +32,18 @@ class TestSQLiteDatabase(unittest.TestCase):
         result = db.get_table_column_names("lang")
         expected_result = ["id", "name"]
         self.assertEqual(expected_result, result)
+
+    def test_truncate_table(self):
+        con = sqlite3.connect(":memory:")
+        con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
+        with con:
+            con.execute("INSERT INTO lang(name) VALUES(?)", ("Python",))
+        db = SQLiteDatabase(connection=con)
+        table_name = "lang"
+        result = db.get_table_data(table_name)
+        expected_result = [(1, "Python")]
+        self.assertEqual(expected_result, result)
+        db.truncate_table(table_name)
+        result = db.get_table_data(table_name)
+        expected_result = []
+        self.assertEqual(expected_result, result)

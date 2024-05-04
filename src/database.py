@@ -32,3 +32,8 @@ class SQLiteDatabase:
         response = response.fetchall()
         result = [row[1] for row in response]
         return result
+
+    def truncate_table(self, table_name: str) -> Rows:
+        response = self._connection.execute(f"DELETE FROM {table_name}")
+        rows = response.fetchall()
+        return rows
