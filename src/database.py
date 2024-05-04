@@ -33,7 +33,12 @@ class SQLiteDatabase:
         result = [row[1] for row in response]
         return result
 
-    def truncate_table(self, table_name: str) -> Rows:
-        response = self._connection.execute(f"DELETE FROM {table_name}")
-        rows = response.fetchall()
-        return rows
+    def insert_rows(self, column_names: tp.List[str], rows: tp.List[list], table_name: str):
+        table_name_and_columns = "{}({})".format(table_name, ",".join(column_names))
+        values_query = ",".join(["?"] * len(column_names))
+        with self._connection:
+            self._connection.executemany(f"INSERT INTO {table_name_and_columns} VALUES({values_query})", rows)
+
+    def truncate_table(self, table_name: str):
+        with self._connection:
+            self._connection.execute(f"DELETE FROM {table_name}")

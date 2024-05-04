@@ -33,6 +33,18 @@ class TestSQLiteDatabase(unittest.TestCase):
         expected_result = ["id", "name"]
         self.assertEqual(expected_result, result)
 
+    def test_insert_rows(self):
+        con = sqlite3.connect(":memory:")
+        con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
+        db = SQLiteDatabase(connection=con)
+        table_name = "lang"
+        column_names = ["id", "name"]
+        rows = [[1, "a"], [2, "b"]]
+        result = db.insert_rows(column_names, rows, table_name)
+        result = db.get_table_data(table_name)
+        expected_result = [(1, "a"), (2, "b")]
+        self.assertEqual(expected_result, result)
+
     def test_truncate_table(self):
         con = sqlite3.connect(":memory:")
         con.execute("CREATE TABLE lang(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE)")
