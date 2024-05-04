@@ -10,8 +10,16 @@ def main():
     if len(sys.argv) == 2:
         db_file_path_name = sys.argv[1]
         _export(db_file_path_name)
+    if len(sys.argv) == 3:
+        csv_directory_path_name = sys.argv[1]
+        db_file_path_name = sys.argv[2]
+        _import(csv_directory_path_name, db_file_path_name)
     else:
         raise ValueError("Incorrect args")
+
+
+def _import(csv_directory_path_name: str, db_file_path_name: str):
+    print("Start importing", csv_directory_path_name, "files to", db_file_path_name)
 
 
 def _export(db_file_path_name: str):
