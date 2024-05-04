@@ -7,10 +7,11 @@ import typing as tp
 
 
 def main():
-    if len(sys.argv) < 2:
-        raise ValueError("No db file path name provided")
-    db_file_path_name = sys.argv[1]
-    _export(db_file_path_name)
+    if len(sys.argv) == 2:
+        db_file_path_name = sys.argv[1]
+        _export(db_file_path_name)
+    else:
+        raise ValueError("Incorrect args")
 
 
 def _export(db_file_path_name: str):
