@@ -15,20 +15,20 @@ def main():
 
 
 def _export(db_file_path_name: str):
-    print("Init export database:", db_file_path_name)
+    print("Start exporting database:", db_file_path_name)
     if not Path(db_file_path_name).exists():
         raise FileExistsError(db_file_path_name)
     directory_export_path_name = _DirectoryNameGenerator().get_directory_path_name(db_file_path_name)
-    print("Init create directory:", directory_export_path_name)
+    print("Start creating directory:", directory_export_path_name)
     Path(directory_export_path_name).mkdir()
     db = _SQLiteDatabase(db_file_path_name=db_file_path_name)
     table_names = db.get_table_names()
     for index, table_name in enumerate(table_names, 1):
-        print(f"Init table {index}/{len(table_names)}", table_name)
+        print(f"Start table {index}/{len(table_names)}", table_name)
         rows = db.get_table_data(table_name)
         colum_names = db.get_table_column_names(table_name)
         csv_file_path_name = "{}/{}.csv".format(directory_export_path_name, table_name)
-        print("Export table to", csv_file_path_name)
+        print("Exporting table to", csv_file_path_name)
         _export_rows_to_csv(colum_names, rows, csv_file_path_name)
 
 
