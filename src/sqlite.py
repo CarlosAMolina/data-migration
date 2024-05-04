@@ -6,7 +6,10 @@ import sys
 import typing as tp
 
 
-def main(db_file_path_name: str):
+def main():
+    if len(sys.argv) < 2:
+        raise ValueError("No db file path name provided")
+    db_file_path_name = sys.argv[1]
     _export(db_file_path_name)
 
 
@@ -88,7 +91,4 @@ def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, csv_file_path_name: 
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise ValueError("No db file path name provided")
-    db_file_path_name = sys.argv[1]
-    main(db_file_path_name)
+    main()
