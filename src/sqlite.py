@@ -1,25 +1,24 @@
 from pathlib import Path
 import csv
 import datetime
-import sqlite3
 import sys
 import typing as tp
+
+from database import Rows
+from database import SQLiteDatabase
+from import_csv import import_csv_directory
 
 
 def main():
     if len(sys.argv) == 2:
         db_file_path_name = sys.argv[1]
         _export(db_file_path_name)
-    if len(sys.argv) == 3:
+    elif len(sys.argv) == 3:
         csv_directory_path_name = sys.argv[1]
         db_file_path_name = sys.argv[2]
-        _import(csv_directory_path_name, db_file_path_name)
+        import_csv_directory(csv_directory_path_name, db_file_path_name)
     else:
         raise ValueError("Incorrect args")
-
-
-def _import(csv_directory_path_name: str, db_file_path_name: str):
-    print("Start importing", csv_directory_path_name, "files to", db_file_path_name)
 
 
 def _export(db_file_path_name: str):
@@ -29,7 +28,7 @@ def _export(db_file_path_name: str):
     directory_export_path_name = _DirectoryNameGenerator().get_directory_path_name(db_file_path_name)
     print("Start creating directory:", directory_export_path_name)
     Path(directory_export_path_name).mkdir()
-    db = _SQLiteDatabase(db_file_path_name=db_file_path_name)
+    db = SQLiteDatabase(db_file_path_name=db_file_path_name)
     table_names = db.get_table_names()
     for index, table_name in enumerate(table_names, 1):
         print(f"Start table {index}/{len(table_names)}", table_name)
@@ -38,9 +37,6 @@ def _export(db_file_path_name: str):
         csv_file_path_name = "{}/{}.csv".format(directory_export_path_name, table_name)
         print("Exporting table to", csv_file_path_name)
         _export_rows_to_csv(colum_names, rows, csv_file_path_name)
-
-
-_Rows = tp.List[tuple]
 
 
 class _DirectoryNameGenerator:
@@ -56,36 +52,7 @@ class _DirectoryNameGenerator:
         return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
 
-class _SQLiteDatabase:
-    def __init__(self, connection: tp.Optional[sqlite3.Connection] = None, db_file_path_name: tp.Optional[str] = None):
-        if all(arg is None for arg in [connection, db_file_path_name]):
-            raise ValueError
-        self._connection: sqlite3.Connection = (
-            connection if db_file_path_name is None else sqlite3.connect(db_file_path_name)
-        )
-
-    def get_table_names(self) -> tp.List[str]:
-        response = self._connection.execute("SELECT * FROM sqlite_master where type='table'")
-        rows = response.fetchall()
-        result = []
-        for row in rows:
-            table_name = row[1]
-            result.append(table_name)
-        return result
-
-    def get_table_data(self, table_name: str) -> _Rows:
-        response = self._connection.execute(f"SELECT * FROM {table_name}")
-        rows = response.fetchall()
-        return rows
-
-    def get_table_column_names(self, table_name: str) -> tp.List[str]:
-        response = self._connection.execute(f"PRAGMA table_info({table_name})")
-        response = response.fetchall()
-        result = [row[1] for row in response]
-        return result
-
-
-def _export_rows_to_csv(headers: tp.List[str], rows: _Rows, csv_file_path_name: str):
+def _export_rows_to_csv(headers: tp.List[str], rows: Rows, csv_file_path_name: str):
     "https://docs.python.org/3/library/csv.html"
     with open(csv_file_path_name, "w", newline="") as csvfile:
         spamwriter = csv.writer(
