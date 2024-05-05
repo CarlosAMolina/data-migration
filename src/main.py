@@ -2,6 +2,7 @@ import sys
 
 from database_postgresql import PostgreSQLDatabase  # TODO rm
 from export_csv import export_to_csv
+from export_csv import export_to_csv_postgresql
 from import_csv import import_csv_directory
 
 
@@ -24,4 +25,5 @@ if __name__ == "__main__":
     print(db.get_table_names())
     print(db.get_table_data("addresses"))
     print(db.get_table_column_names("addresses"))
+    export_to_csv_postgresql()
     # db.test()
