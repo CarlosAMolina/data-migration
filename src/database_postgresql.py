@@ -2,9 +2,8 @@ import typing as tp
 
 import psycopg
 
+from database_types import Rows
 import config_postgresql as config
-
-Rows = tp.List[tuple]
 
 
 class PostgreSQLDatabase:
@@ -30,7 +29,6 @@ class PostgreSQLDatabase:
             result.append(table_name)
         return result
 
-    # TODO fix typing
-    def get_table_data(self, table_name: str) -> tp.List[str]:
+    def get_table_data(self, table_name: str) -> Rows:
         with psycopg.connect(self._uri) as conn:
             return conn.execute(f"SELECT * FROM {config.SCHEMA}.{table_name}").fetchall()

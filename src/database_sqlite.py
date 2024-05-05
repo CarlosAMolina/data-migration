@@ -1,7 +1,7 @@
 import sqlite3
 import typing as tp
 
-Rows = tp.List[tuple]
+from database_types import Rows
 
 
 class SQLiteDatabase:
