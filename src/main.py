@@ -22,4 +22,5 @@ if __name__ == "__main__":
     # TODO drop below
     db = PostgreSQLDatabase()
     print(db.get_table_names())
+    print(db.get_table_data("addresses"))
     # db.test()

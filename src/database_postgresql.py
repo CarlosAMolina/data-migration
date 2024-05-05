@@ -30,14 +30,7 @@ class PostgreSQLDatabase:
             result.append(table_name)
         return result
 
-    # TODO rm
-    def test(self):
+    # TODO fix typing
+    def get_table_data(self, table_name: str) -> tp.List[str]:
         with psycopg.connect(self._uri) as conn:
-            print(
-                conn.execute(
-                    "SELECT * FROM pg_catalog.pg_tables"
-                    " WHERE schemaname != 'pg_catalog' AND"
-                    " schemaname != 'information_schema';"
-                ).fetchall()
-            )
-            print(conn.execute("SELECT * FROM contacts.emails").fetchall())
+            return conn.execute(f"SELECT * FROM {config.SCHEMA}.{table_name}").fetchall()
