@@ -27,9 +27,10 @@ class SQLiteDatabase:
         return rows
 
     def get_table_column_names(self, table_name: str) -> tp.List[str]:
-        response = self._connection.execute(f"PRAGMA table_info({table_name})")
+        """https://stackoverflow.com/questions/947215/how-to-get-a-list-of-column-names-on-sqlite3-database"""
+        response = self._connection.execute(f"SELECT name FROM PRAGMA_TABLE_INFO('{table_name}') ORDER BY cid ASC;")
         rows = response.fetchall()
-        result = [row[1] for row in rows]
+        result = [row[0] for row in rows]
         return result
 
     def insert_rows(self, column_names: tp.List[str], rows: tp.List[list], table_name: str):
