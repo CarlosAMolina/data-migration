@@ -42,7 +42,7 @@ def _export_to_csv(db: tp.Union[SQLiteDatabase, PostgreSQLDatabase], directory_e
 class _SQLiteDirectoryNameGenerator:
     def get_directory_path_name(self, db_file_path_name: str) -> str:
         db_file_name = self._get_db_file_name_from_path_name(db_file_path_name)
-        return "/tmp/{}-{}".format(db_file_name, _get_str_date_time_for_directory_name())
+        return "/tmp/export-sqlite-{}-{}".format(db_file_name, _get_str_date_time_for_directory_name())
 
     def _get_db_file_name_from_path_name(self, db_file_path_name: str) -> str:
         return Path(db_file_path_name).name
@@ -50,7 +50,7 @@ class _SQLiteDirectoryNameGenerator:
 
 class _PostgreSQLDirectoryNameGenerator:
     def get_directory_path_name(self, schema_name: str) -> str:
-        return "/tmp/postgresql-{}-{}".format(schema_name, _get_str_date_time_for_directory_name())
+        return "/tmp/export-postgresql-{}-{}".format(schema_name, _get_str_date_time_for_directory_name())
 
 
 def _get_str_date_time_for_directory_name() -> str:
