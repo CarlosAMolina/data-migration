@@ -35,8 +35,9 @@ class SQLiteDatabase:
     def insert_rows(self, column_names: tp.List[str], rows: tp.List[list], table_name: str):
         table_name_and_columns = "{}({})".format(table_name, ",".join(column_names))
         values_query = ",".join(["?"] * len(column_names))
+        query = f"INSERT INTO {table_name_and_columns} VALUES({values_query})"
         with self._connection:
-            self._connection.executemany(f"INSERT INTO {table_name_and_columns} VALUES({values_query})", rows)
+            self._connection.executemany(query, rows)
 
     def truncate_table(self, table_name: str):
         with self._connection:
