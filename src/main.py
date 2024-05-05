@@ -19,4 +19,7 @@ def main():
 
 if __name__ == "__main__":
     # main() # TODO uncomment
-    PostgreSQLDatabase().test()  # TODO rm
+    # TODO drop below
+    db = PostgreSQLDatabase()
+    print(db.get_table_names())
+    # db.test()
