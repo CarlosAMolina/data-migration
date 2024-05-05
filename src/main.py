@@ -1,5 +1,6 @@
 import sys
 
+from database import PostgreSQLDatabase  # TODO rm
 from export_csv import export_to_csv
 from import_csv import import_csv_directory
 
@@ -17,4 +18,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main() # TODO uncomment
+    PostgreSQLDatabase().test()  # TODO rm
