@@ -2,7 +2,7 @@ import typing as tp
 
 import psycopg
 
-import database_config as config
+import config_postgresql as config
 
 Rows = tp.List[tuple]
 
