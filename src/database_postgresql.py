@@ -32,3 +32,11 @@ class PostgreSQLDatabase:
     def get_table_data(self, table_name: str) -> Rows:
         with psycopg.connect(self._uri) as conn:
             return conn.execute(f"SELECT * FROM {config.SCHEMA}.{table_name}").fetchall()
+
+    def get_table_column_names(self, table_name: str) -> Rows:
+        with psycopg.connect(self._uri) as conn:
+            rows = conn.execute(
+                f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table_name}';"
+            ).fetchall()
+        result = [row[0] for row in rows]
+        return result

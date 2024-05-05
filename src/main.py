@@ -23,4 +23,5 @@ if __name__ == "__main__":
     db = PostgreSQLDatabase()
     print(db.get_table_names())
     print(db.get_table_data("addresses"))
+    print(db.get_table_column_names("addresses"))
     # db.test()

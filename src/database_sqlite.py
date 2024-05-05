@@ -28,8 +28,8 @@ class SQLiteDatabase:
 
     def get_table_column_names(self, table_name: str) -> tp.List[str]:
         response = self._connection.execute(f"PRAGMA table_info({table_name})")
-        response = response.fetchall()
-        result = [row[1] for row in response]
+        rows = response.fetchall()
+        result = [row[1] for row in rows]
         return result
 
     def insert_rows(self, column_names: tp.List[str], rows: tp.List[list], table_name: str):
