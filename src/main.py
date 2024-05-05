@@ -1,6 +1,6 @@
 import sys
 
-from database import PostgreSQLDatabase  # TODO rm
+from database_postgresql import PostgreSQLDatabase  # TODO rm
 from export_csv import export_to_csv
 from import_csv import import_csv_directory
 

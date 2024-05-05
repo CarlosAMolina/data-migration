@@ -2,7 +2,7 @@ import csv
 import typing as tp
 
 from pathlib import Path
-from database import SQLiteDatabase
+from database_sqlite import SQLiteDatabase
 
 
 def import_csv_directory(csv_directory_path_name: str, db_file_path_name: str):

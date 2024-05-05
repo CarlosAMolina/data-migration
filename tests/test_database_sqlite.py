@@ -2,7 +2,7 @@ import unittest
 
 import sqlite3
 
-from src.database import SQLiteDatabase
+from src.database_sqlite import SQLiteDatabase
 
 
 class TestSQLiteDatabase(unittest.TestCase):

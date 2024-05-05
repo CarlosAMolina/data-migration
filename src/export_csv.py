@@ -3,8 +3,8 @@ import csv
 import datetime
 import typing as tp
 
-from database import Rows
-from database import SQLiteDatabase
+from database_sqlite import Rows
+from database_sqlite import SQLiteDatabase
 
 
 def export_to_csv(db_file_path_name: str):
