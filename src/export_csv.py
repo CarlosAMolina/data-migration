@@ -47,24 +47,19 @@ def export_to_csv_postgresql():
 class _SQLiteDirectoryNameGenerator:
     def get_directory_path_name(self, db_file_path_name: str) -> str:
         db_file_name = self._get_db_file_name_from_path_name(db_file_path_name)
-        return "/tmp/{}-{}".format(db_file_name, self._str_date_time_for_name)
+        return "/tmp/{}-{}".format(db_file_name, _get_str_date_time_for_directory_name())
 
     def _get_db_file_name_from_path_name(self, db_file_path_name: str) -> str:
         return Path(db_file_path_name).name
 
-    @property
-    def _str_date_time_for_name(self) -> str:
-        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-
 
 class _PostgreSQLDirectoryNameGenerator:
     def get_directory_path_name(self, schema_name: str) -> str:
-        return "/tmp/postgresql-{}-{}".format(schema_name, self._str_date_time_for_name)
+        return "/tmp/postgresql-{}-{}".format(schema_name, _get_str_date_time_for_directory_name())
 
-    # TODO refactor duplicated in _SQLiteDirectoryNameGenerator
-    @property
-    def _str_date_time_for_name(self) -> str:
-        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+def _get_str_date_time_for_directory_name() -> str:
+    return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
 
 def _export_rows_to_csv(headers: tp.List[str], rows: Rows, csv_file_path_name: str):
