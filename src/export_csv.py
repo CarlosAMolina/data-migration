@@ -29,6 +29,7 @@ def _export_to_csv(db: tp.Union[SQLiteDatabase, PostgreSQLDatabase], directory_e
     print("Start creating directory:", directory_export_path_name)
     Path(directory_export_path_name).mkdir()
     table_names = db.get_table_names()
+    print("Tables to export:", len(table_names))
     for index, table_name in enumerate(table_names, 1):
         print(f"Start table {index}/{len(table_names)}", table_name)
         rows = db.get_table_data(table_name)
